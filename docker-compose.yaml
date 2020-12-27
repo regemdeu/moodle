@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  mariadb:
+    image: mariadb
+    volumes:
+      - "${PWD}/mariadb:/var/lib/mysql"
+    environment:
+      MYSQL_USER: moodle
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: moodle
+  php:
+    build: ./php
+    image: moodlephp
+    volumes:
+      - "${PWD}:/var/www/html"
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - "${PWD}/nginx:/etc/nginx/conf.d"
+      - "${PWD}:/var/www/html"
+    ports:
+      - 8088:80
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8089:8080
